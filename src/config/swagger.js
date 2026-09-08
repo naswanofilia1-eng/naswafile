@@ -11,6 +11,10 @@ const options = {
     },
     servers: [
       {
+        url: "https://todo-api-ten-eta.vercel.app",
+        description: "Production server (Vercel)",
+      },
+      {
         url: "http://localhost:3000",
         description: "Local development server",
       },
@@ -47,12 +51,11 @@ const options = {
       },
     },
   },
-  // Menggunakan **.js agar dapat membaca semua file JS di folder mana pun
   apis: [
     "./src/routes/*.js",
     "./todo-api/src/routes/*.js",
     "**/routes/*.js",
-    "**/*.routes.js"
+    "**/*.routes.js",
   ],
 };
 
