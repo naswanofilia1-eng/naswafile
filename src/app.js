@@ -1,32 +1,48 @@
+ 
 const express = require("express");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
+
+// Routes
 const todoRoutes = require("./routes/todo.routes");
 const authRoutes = require("./routes/auth.routes");
 const statsRoutes = require("./routes/stats.routes");
+const categoryRoutes = require("./routes/category.routes");
+const activityLogRoutes = require("./routes/activityLog.routes");
+
+// Middlewares
 const logger = require("./middlewares/logger.middleware");
 const notFound = require("./middlewares/notFound.middleware");
 const errorHandler = require("./middlewares/errorHandler.middleware");
 
 const app = express();
 
-// Middleware
+// ======================================
+// MIDDLEWARE
+// ======================================
 app.use(logger);
 app.use(cors());
 app.use(express.json());
 
-// Root endpoint
+// ======================================
+// ROOT ENDPOINT
+// ======================================
 app.get("/", (req, res) => {
-  res.json({ message: "Todo API is running" });
+  res.json({
+    message: "Todo API is running",
+  });
 });
 
-// Swagger API Documentation
-// CSS + JS dimuat dari CDN (cdnjs) supaya tidak 404 saat di-deploy ke Vercel,
-// karena Vercel serverless tidak melayani file statis dari node_modules.
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css";
+// ======================================
+// SWAGGER DOCUMENTATION
+// ======================================
+const CSS_URL =
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css";
+
 const JS_URL = [
-  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui-bundle.js","https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui-standalone-preset.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui-bundle.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui-standalone-preset.js",
 ];
 
 app.use(
@@ -38,14 +54,23 @@ app.use(
   })
 );
 
-// Routes
+// ======================================
+// API ROUTES
+// ======================================
 app.use("/api/auth", authRoutes);
+
 app.use("/api/todos", todoRoutes);
+
 app.use("/api/stats", statsRoutes);
 
-// Error handling
+app.use("/api/categories", categoryRoutes);
+
+app.use("/api/activity-logs", activityLogRoutes);
+
+// ======================================
+// ERROR HANDLING
+// ======================================
 app.use(notFound);
 app.use(errorHandler);
 
 module.exports = app;
-
